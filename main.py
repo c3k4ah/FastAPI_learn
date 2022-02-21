@@ -3,7 +3,18 @@ import uvicorn
 import mysql.connector as myconnect
 
 app = FastAPI()
+#--------------------------------------------------------------------------
 
+def sendJson(reponses, nomColonne):
+    resultats = [] 
+    
+    for reponse in reponses:
+        resultat = {}
+        for ligne, donnee in zip(nomColonne, reponse):
+            resultat[ligne] = donnee
+        resultats.append(resultat)
+    return resultats
+#--------------------------------------------------------------------------
 @app.get('/')
 def lieux():
     try:
@@ -17,24 +28,16 @@ def lieux():
         lieuxs ={}
         for lieux in listeLieux:
             lieuxs[lieux[0]]=lieux[1]
+        nomColonne = [
+            'id', 
+            'Lieux', 
+            ]
 
     except myconnect.error as error:
         print(error)
+    return sendJson(lieuxs, nomColonne)
     
-    return lieuxs
 
-# print(lieux())
-#    return listeLieux[lieux[0]:lieux[1]]
-# @app.get('/')
-# def index():
-#     return {"Texte":"Ceci est un text"}
-
-# @app.get('/listeEtudiant')
-# def liste():
-#     return [
-#         {"Cekah":"Licence en infomramatique"}, 
-#         {"Dominick":"Bacc + 5"}
-#         ]
     
 if __name__ == '__main__':
     uvicorn.run(app,host="127.0.0.1",port=8000)
