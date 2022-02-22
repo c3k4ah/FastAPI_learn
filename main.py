@@ -4,7 +4,6 @@ import mysql.connector as myconnect
 
 app = FastAPI()
 #--------------------------------------------------------------------------
-
 def sendJson(reponses, nomColonne):
     resultats = [] 
     
